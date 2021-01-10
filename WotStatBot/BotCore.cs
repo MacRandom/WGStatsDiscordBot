@@ -59,6 +59,8 @@ namespace WotStatBot
 
         private async Task RunAsync()
         {
+            await _discordClient.ConnectAsync();
+
             while (!_cancellationToken.IsCancellationRequested)
                 await Task.Delay(TimeSpan.FromMinutes(1));
         }
