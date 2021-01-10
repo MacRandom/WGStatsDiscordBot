@@ -30,8 +30,6 @@
             "statistics.random.frags,+" +
             "statistics.random.hits_percents,+" +
             "statistics.random.losses,+" +
-            "statistics.random.max_damage,+" +
-            "statistics.random.max_frags,+" +
             "statistics.random.survived_battles,+" +
             "statistics.random.wins";
     }
