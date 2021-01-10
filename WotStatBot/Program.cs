@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using WotStatBot.Wargaming;
 
 namespace WotStatBot
 {
@@ -15,8 +16,9 @@ namespace WotStatBot
                 .Build();
 
             CancellationTokenSource cancelationToken = new CancellationTokenSource();
+            WargamingApi wargamingApi = new WargamingApi(configuration);
 
-            var bot = new BotCore(configuration, cancelationToken);
+            var bot = new BotCore(configuration, cancelationToken, wargamingApi);
 
             await bot.Start();
         }

@@ -7,7 +7,7 @@ using WotStatBot.Models;
 
 namespace WotStatBot.Wargaming
 {
-    internal class WargamingApi
+    public class WargamingApi
     {
         private IConfigurationRoot _configuration;
         private string _appId;

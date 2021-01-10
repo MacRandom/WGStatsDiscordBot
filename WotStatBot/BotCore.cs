@@ -6,6 +6,7 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using Microsoft.Extensions.Configuration;
 using WotStatBot.Modules;
+using WotStatBot.Wargaming;
 
 namespace WotStatBot
 {
@@ -13,14 +14,16 @@ namespace WotStatBot
     {
         private IConfigurationRoot _configuration;
         private CancellationTokenSource _cancellationToken;
+        private WargamingApi _wargamingApi;
         private DiscordClient _discordClient;
         private InteractivityModule _interactivity;
         private CommandsNextModule _commands;
 
-        public BotCore(IConfigurationRoot configuration, CancellationTokenSource cancelationToken)
+        public BotCore(IConfigurationRoot configuration, CancellationTokenSource cancelationToken, WargamingApi wargamingApi)
         {
             _configuration = configuration;
             _cancellationToken = cancelationToken;
+            _wargamingApi = wargamingApi;
         }
 
         public async Task Start()
@@ -73,7 +76,8 @@ namespace WotStatBot
             deps.AddInstance(_interactivity)
                 .AddInstance(_cancellationToken)
                 .AddInstance(_configuration)
-                .AddInstance(_discordClient);
+                .AddInstance(_discordClient)
+                .AddInstance(_wargamingApi);
 
             return deps.Build();
         }
