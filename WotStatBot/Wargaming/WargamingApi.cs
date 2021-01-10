@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WotStatBot.Models;
 
 namespace WotStatBot.Wargaming
@@ -58,33 +59,29 @@ namespace WotStatBot.Wargaming
 
             var response = await client.GetAsync(urlRequest);
             var responseString = await response.Content.ReadAsStringAsync();
-            dynamic parsed = JsonConvert.DeserializeObject(responseString);
+            
+            var jObj = JObject.Parse(responseString);
+            string status = jObj.SelectToken("status").ToString();
+            dynamic parsed = JsonConvert.DeserializeObject(jObj.SelectToken($"data.{id}").ToString());
 
-            if (parsed.status == "ok")
+            if (status == "ok")
             {
-                int count = parsed.meta.count;
-                if (count > 0)
+                return new PlayerStats
                 {
-                    return new PlayerStats
-                    {
-                        TreesCut = parsed.data[0].statistics.random.avg_damage_assisted,
-                        AverageDamageAssisted = parsed.data[0].statistics.random.avg_damage_assisted,
-                        AverageDamageAssistedRadio = parsed.data[0].statistics.random.avg_damage_assisted_radio,
-                        AverageDamageAssistedTrack = parsed.data[0].statistics.random.avg_damage_assisted_track,
-                        AverageDamageBlocked = parsed.data[0].statistics.random.avg_damage_blocked,
-                        BattleCount = parsed.data[0].statistics.random.battles,
-                        DrawCount = parsed.data[0].statistics.random.draws,
-                        FragsCount = parsed.data[0].statistics.random.frags,
-                        HitsPercent = parsed.data[0].statistics.random.hits_percents,
-                        LoseCount = parsed.data[0].statistics.random.losses,
-                        SurviveCount = parsed.data[0].statistics.random.survived_battles,
-                        WinCount = parsed.data[0].statistics.random.wins
-                    };
-                }
-                else
-                {
-                    throw new Exception("Игрок не найден");
-                }
+                    TreesCut = parsed.statistics.trees_cut,
+                    AverageDamageAssisted = parsed.statistics.random.avg_damage_assisted,
+                    AverageDamageAssistedRadio = parsed.statistics.random.avg_damage_assisted_radio,
+                    AverageDamageAssistedTrack = parsed.statistics.random.avg_damage_assisted_track,
+                    AverageDamageBlocked = parsed.statistics.random.avg_damage_blocked,
+                    BattleCount = parsed.statistics.random.battles,
+                    DrawCount = parsed.statistics.random.draws,
+                    FragsCount = parsed.statistics.random.frags,
+                    HitsPercent = parsed.statistics.random.hits_percents,
+                    LoseCount = parsed.statistics.random.losses,
+                    SurviveCount = parsed.statistics.random.survived_battles,
+                    WinCount = parsed.statistics.random.wins,
+                    DamageDealt = parsed.statistics.random.damage_dealt
+                };
             }
             else
             {
