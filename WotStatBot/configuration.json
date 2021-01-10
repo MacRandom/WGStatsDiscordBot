@@ -1,0 +1,11 @@
+{
+  "Discord": {
+    "Token": "",
+    "AppId": "",
+    "AppSecret": "",
+    "CommandPrefix": "/"
+  },
+  "Wargaming": {
+    "AppId": ""
+  }
+}
