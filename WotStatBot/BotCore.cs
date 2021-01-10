@@ -26,7 +26,41 @@ namespace WotStatBot
 
         public async Task Start()
         {
+            try
+            {
+                _discordClient = new DiscordClient(new DiscordConfiguration
+                {
+                    TokenType = TokenType.Bot,
+                    Token = _configuration["Discord:Token"]
+                });
 
+                _interactivity = _discordClient.UseInteractivity(new InteractivityConfiguration
+                {
+                    PaginationBehaviour = TimeoutBehaviour.Delete,
+                    PaginationTimeout = TimeSpan.FromSeconds(30),
+                    Timeout = TimeSpan.FromSeconds(30)
+                });
+
+                var deps = BuildDeps();
+
+                _commands = _discordClient.UseCommandsNext(new CommandsNextConfiguration
+                {
+                    StringPrefix = _configuration["Discord:CommandPrefix"],
+                    Dependencies = deps
+                });
+
+                await RunAsync();
+            }
+            catch (Exception exc)
+            {
+                Console.Error.WriteLine(exc.ToString());
+            }
+        }
+
+        private async Task RunAsync()
+        {
+            while (!_cancellationToken.IsCancellationRequested)
+                await Task.Delay(TimeSpan.FromMinutes(1));
         }
 
         private DependencyCollection BuildDeps()
