@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using Microsoft.Extensions.Configuration;
+using WotStatBot.Modules;
 
 namespace WotStatBot
 {
@@ -48,6 +47,8 @@ namespace WotStatBot
                     StringPrefix = _configuration["Discord:CommandPrefix"],
                     Dependencies = deps
                 });
+
+                _commands.RegisterCommands<BotCommands>();
 
                 await RunAsync();
             }
