@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
@@ -13,7 +14,9 @@ namespace WotStatBot
                 .AddJsonFile("configuration.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            var bot = new BotCore(configuration);
+            CancellationTokenSource cancelationToken = new CancellationTokenSource();
+
+            var bot = new BotCore(configuration, cancelationToken);
 
             await bot.Start();
         }
