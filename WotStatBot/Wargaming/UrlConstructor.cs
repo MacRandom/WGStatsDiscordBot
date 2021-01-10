@@ -20,6 +20,7 @@
 
         public string GetPlayerStatsRandomUrl(string id)
             => _wotUrlPrefix + _infoSuffix + _appIdField + _appId + _accIdField + id +
+            "&extra=statistics.random" +
             "&fields=statistics.trees_cut,+" +
             "statistics.random.avg_damage_assisted,+" +
             "statistics.random.avg_damage_assisted_radio,+" +
@@ -31,6 +32,7 @@
             "statistics.random.hits_percents,+" +
             "statistics.random.losses,+" +
             "statistics.random.survived_battles,+" +
-            "statistics.random.wins";
+            "statistics.random.wins,+" +
+            "statistics.random.damage_dealt";
     }
 }

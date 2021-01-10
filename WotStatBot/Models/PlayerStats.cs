@@ -14,5 +14,6 @@
         public int LoseCount { get; set; }
         public int SurviveCount { get; set; }
         public int WinCount { get; set; }
+        public int DamageDealt { get; set; }
     }
 }
